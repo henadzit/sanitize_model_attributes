@@ -1,7 +1,7 @@
 require "sanitize_model_attributes/version"
 
 module SanitizeModelAttributes
-  def included(base)
+  def self.included(base)
     class << base
       include ClassMethods
     end

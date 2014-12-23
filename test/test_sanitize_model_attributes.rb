@@ -31,4 +31,15 @@ class TestString < Minitest::Test
     instance.name = '<strong>hogehoge</strong>'
     assert_equal 'hogehoge', instance.instance_variable_get(:@name)
   end
+
+  def test_to_skip_frozen_string
+    instance = @klass.new
+
+    def instance.write_attribute(name, value)
+      instance_variable_set("@#{name}".to_sym, value)
+    end
+
+    instance.name = '<strong>hogehoge</strong>'.freeze
+    assert_equal '<strong>hogehoge</strong>', instance.instance_variable_get(:@name)
+  end
 end

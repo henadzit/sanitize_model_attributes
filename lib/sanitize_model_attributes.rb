@@ -1,4 +1,5 @@
 require 'sanitize_model_attributes/version'
+require 'sanitize'
 
 module SanitizeModelAttributes
   def self.included(base)

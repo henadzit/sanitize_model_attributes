@@ -21,6 +21,38 @@ class TestString < Minitest::Test
     assert instance.respond_to? :model_name=
   end
 
+  def test_to_escape
+    instance = @klass.new
+
+    def instance.write_attribute(name, value)
+      instance_variable_set("@#{name}".to_sym, value)
+    end
+
+    instance.name = '&&&'
+    assert_equal '&amp;&amp;&amp;', instance.instance_variable_get(:@name)
+  end
+
+  def test_to_escape_with_whitelist
+    instance = @klass.new
+
+    def instance.write_attribute(name, value)
+      instance_variable_set("@#{name}".to_sym, value)
+    end
+
+    SanitizeModelAttributes.configure do |config|
+      config.white_character_maps = {
+        '&amp;' => '&'
+      }
+    end
+
+    instance.name = '&&&'
+    assert_equal '&&&', instance.instance_variable_get(:@name)
+
+    SanitizeModelAttributes.configure do |config|
+      config.white_character_maps = {}
+    end
+  end
+
   def test_to_run
     instance = @klass.new
 
@@ -28,7 +60,7 @@ class TestString < Minitest::Test
       instance_variable_set("@#{name}".to_sym, value)
     end
 
-    instance.name = '<strong>hogehoge</strong>'
+    instance.name = '<div></div><p><strong>hoge</strong></p><div>hoge</div>'
     assert_equal 'hogehoge', instance.instance_variable_get(:@name)
   end
 

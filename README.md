@@ -1,7 +1,6 @@
 # SanitizeModelAttributes
 
 Sanitize ActiveRecord attributes.
-This gem depends on [sanitize](https://github.com/rgrove/sanitize) gem.
 
 ## Installation
 
